@@ -1,7 +1,8 @@
 var Model = function(){
   this.stepInterval = null;
   this.lastRender = Date.now();
-  this.calculateRenderMS = function()
+  this.currentStepMS = 0;
+  this.calculateStepMS = function()
   {
     var time = Date.now();
     result = (time - this.lastRender);
@@ -14,6 +15,6 @@ var Model = function(){
   }
   this.step = function(){
     this.currentStepMS = this.calculateStepMS()
-    console.log("Rendering "+this.currentStepMS+ "ms");
+    //console.log("Rendering "+this.currentStepMS+ "ms");
   }
 };

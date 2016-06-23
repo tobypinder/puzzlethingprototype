@@ -29,8 +29,13 @@ var View = function(){
     this.ctx = c.getContext('2d');
     this.ctx.imageSmoothingEnabled = false;
     this.stepInterval = setInterval(this.step.bind(this), Main.renderMS());
-    this.ui = new View_UI;
+
+    this.ui = new View_UI();
     this.ui.init(this);
+
+    this.grid = new View_Grid();
+    this.grid.init(this);
+
   };
   this.step = function()
   {
@@ -39,6 +44,8 @@ var View = function(){
     this.pushState();
 
     this.ui.render();
+    this.grid.render();
+
     this.popState();
   };
 
