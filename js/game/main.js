@@ -1,6 +1,7 @@
 var Main = {
   view: null,
   model: null,
+  // TODO: Fix loops https://gablaxian.com/articles/creating-a-game-with-javascript/introduction
   renderFPS: 60,
   renderMS: function() { return (1000 / parseFloat(this.renderFPS)) },
   engineFPS: 60,
