@@ -2,7 +2,8 @@ var Model_Tile = function(model){
   this.model = null;
   this.grid = null;
 
-  this.color = '000'
+  this.color = '000';
+  this.moving = false;
 
   this.init = function(model){
     this.model = model;
