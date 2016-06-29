@@ -37,7 +37,7 @@ var View_Grid = function(){
     var x = this.baseX + (i * this.tileWidth);
     var y = this.baseY + (j * this.tileHeight);
 
-    this.ctx.fillStyle = '#f00';
+    this.ctx.fillStyle = "#" + this.model.grid.rows[j][i].color;
     this.ctx.fillRect(x, y, this.tileWidth, this.tileHeight)
   }
 

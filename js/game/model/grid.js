@@ -1,4 +1,4 @@
-var Model_Grid = function(){
+var Model_Grid = function(model){
   this.model = null;
 
   this.cursorLX = 2;
@@ -14,9 +14,18 @@ var Model_Grid = function(){
   this.cursorSwapDelay = 0;
   this.cursorMoved = false;
 
-  this.rows = []
-  this.init = function(view){
+  this.rows = [];
+
+  this.init = function(model){
     this.model = model;
+
+    for(var i=0; i<this.HEIGHT; i++) {
+      var row = [];
+      for(var j=0; j<this.WIDTH; j++) {
+        row[j] = new Model_Tile(model);
+      }
+      this.rows.push(row);
+    }
   };
   this.step = function(ms){
     this.decrementDelays(ms);
@@ -63,4 +72,6 @@ var Model_Grid = function(){
       this.cursorMoved = true;
     }
   }
+
+  this.init(model);
 }

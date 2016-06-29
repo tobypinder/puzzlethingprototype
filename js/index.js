@@ -4,6 +4,7 @@ $(function() {
     'main',
     'model',
     'model/grid',
+    'model/tile',
     'view',
     'view/ui',
     'view/grid',
