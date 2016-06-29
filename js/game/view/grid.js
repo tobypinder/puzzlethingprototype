@@ -1,10 +1,7 @@
 var View_Grid = function(){
+  this.model = null;
   this.view = null;
   this.ctx = null;
-  this.init = function(view){
-    this.view = view;
-    this.ctx = view.ctx;
-  };
   this.baseX = 3;
   this.baseY = 3;
   this.tileWidth = 12;
@@ -13,11 +10,13 @@ var View_Grid = function(){
   this.gridWidth = 6;
   this.gridHeight = 12;
 
-  this.cursorLX = 2;
-  this.cursorRX = 3;
-  this.cursorY  = 6;
-
   this.lineWidth = 1;
+
+  this.init = function(view){
+    this.view  = view;
+    this.model = view.model;
+    this.ctx   = view.ctx;
+  };
   this.render = function() {
     // TODO: Render the grid.
     for(var i=0; i<this.gridWidth; i++) {
@@ -26,8 +25,8 @@ var View_Grid = function(){
       }
     }
 
-    this.renderCross(this.cursorLX, this.cursorY);
-    this.renderCross(this.cursorRX, this.cursorY);
+    this.renderCross(this.model.grid.cursorLX, this.model.grid.cursorY);
+    this.renderCross(this.model.grid.cursorRX, this.model.grid.cursorY);
   };
 
   this.renderCell = function(i, j) {

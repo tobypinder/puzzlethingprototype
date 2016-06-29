@@ -2,10 +2,12 @@ $(function() {
   var loaded = 0;
   var scripts = [
     'main',
+    'model',
+    'model/grid',
     'view',
     'view/ui',
     'view/grid',
-    'model'
+    'keyboard'
   ];
 
   $.each(scripts, function(index, value) {

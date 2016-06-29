@@ -1,21 +1,35 @@
 var Main = {
   view: null,
   model: null,
-  // TODO: Fix loops https://gablaxian.com/articles/creating-a-game-with-javascript/introduction
-  renderFPS: 60,
-  renderMS: function() { return (1000 / parseFloat(this.renderFPS)) },
-  engineFPS: 60,
-  engineMS: function() { return (1000 / parseFloat(this.engineFPS)) },
-  gameLoop: null,
+  lastMS: 0,
+  frameNumber: 0,
+  frameRate: 0,
   init: function(){
-    this.view = new View();
-    this.view.init();
-
     this.model = new Model();
     this.model.init();
+
+    this.view = new View();
+    this.view.init(this.model);
+
+    Keyboard.init();
+
+    requestAnimationFrame(Main.step.bind(this))
   },
-  step: function(){
-    this.view.step();
-    this.model.step();
+  step: function(ms){
+    var stepMS = this.stepMS(ms);
+
+    this.view.step(stepMS);
+    this.model.step(stepMS);
+
+    requestAnimationFrame(Main.step.bind(this))
+  },
+  stepMS: function(ms) {
+    var stepMS = (ms - this.lastMS);
+
+    this.lastMS = ms;
+    this.frameNumber++;
+    this.frameRate = (1000 / stepMS).toFixed(2);
+
+    return stepMS;
   }
 };

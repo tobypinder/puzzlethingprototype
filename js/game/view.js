@@ -1,19 +1,11 @@
 var View = function(){
   this.ctx = null;
+  this.model = null;
   this.ui = null;
   this.canvasHeight = 800;
   this.canvasWidth = 600;
   this.renderHeight = 200;
   this.renderWidth = 150;
-  this.lastRender = Date.now();
-  this.calculateFPS = function()
-  {
-    var time = Date.now();
-    result = parseInt(1000 / (time - this.lastRender))
-
-    this.lastRender = time;
-    return result
-  };
   this.renderScaleX = function()
   {
     return this.canvasHeight / this.renderHeight
@@ -22,24 +14,21 @@ var View = function(){
   {
     return this.canvasHeight / this.renderHeight
   };
-  this.frameNumber = 0;
-  this.stepInterval = null;
-  this.init = function(){
+  this.init = function(model){
     var c = document.getElementById('game');
     this.ctx = c.getContext('2d');
     this.ctx.imageSmoothingEnabled = false;
-    this.stepInterval = setInterval(this.step.bind(this), Main.renderMS());
+
+    this.model = model;
 
     this.ui = new View_UI();
     this.ui.init(this);
 
     this.grid = new View_Grid();
     this.grid.init(this);
-
   };
-  this.step = function()
+  this.step = function(ms)
   {
-    this.frameNumber++;
     this.wipe();
     this.pushState();
 
