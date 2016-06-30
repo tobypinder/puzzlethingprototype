@@ -12,7 +12,6 @@ var Main = {
     this.view.init(this.model);
 
     Keyboard.init();
-
     requestAnimationFrame(Main.step.bind(this))
   },
   step: function(ms){

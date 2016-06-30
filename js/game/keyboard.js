@@ -4,7 +4,8 @@ var Keyboard = {
     up: 0,
     right: 0,
     down: 0,
-    space: 0
+    space: 0,
+    nudge: 0
   },
   init: function() {
     document.addEventListener('keydown', function(e) { Keyboard.changeKey(e.keyCode, 1, e) });
@@ -32,6 +33,9 @@ var Keyboard = {
         break;
       case 32:
         key = 'space'
+        break;
+      case 67: // c
+        key = 'nudge'
         break;
     }
 

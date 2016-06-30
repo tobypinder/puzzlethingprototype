@@ -74,13 +74,20 @@ var Model_Tile = function(){
         this.type = this.TYPES.void;
         break;
     }
+    this.updateFromType()
+  }
 
+  this.updateFromType = function(){
     this.color = this.type.color;
     this.empty = this.type.empty;
   }
 
   this.swapWith = function(ty, tx, delay, callback) {
     var target = this.grid.rows[ty][tx];
+
+    if(target.moving || this.moving) {
+      return false
+    }
 
     this.grid.rows[ty][tx].moving = true;
     this.moving = true;
@@ -95,10 +102,6 @@ var Model_Tile = function(){
     target.moveFinish = Main.lastMS + delay;
 
     setTimeout(function(){
-
-      var l = this;
-      var r = target;
-
       this.moving   = false;
       target.moving = false;
 
@@ -118,13 +121,16 @@ var Model_Tile = function(){
       if(callback) {
         callback.bind(this)(target);
       }
+
+      this.matchCheck();
+      target.matchCheck();
     }.bind(this), delay)
   }
 
   this.gravity = function()
   {
     // Empty tiles cannot "fall"
-    if(this.empty === false)
+    if(this.empty === false && this.moving === false)
     {
       if((this.y+1) < this.grid.HEIGHT && this.grid.rows[this.y + 1][this.x].empty === true){
         // Tile is above empty space.
@@ -139,6 +145,107 @@ var Model_Tile = function(){
           }
         })
       }
+    }
+  }
+
+  this.matchCheck = function() {
+    // this.checkLeft() + this.checkRight() >= 2
+    // this.checkUp() + this.checkDown() >= 2
+    var left  = this.matchCheckLeft([]);
+    var right = this.matchCheckRight([]);
+    var up    = this.matchCheckUp([]);
+    var down  = this.matchCheckDown([]);
+
+    if(left.length + right.length >= 2) {
+      this.transformTileType(this.TYPES.void)
+
+      for(var i=0; i< left.length; i++) {
+        this.grid.rows[left[i][1]][left[i][0]].transformTileType(this.TYPES.void)
+      }
+      for(var i=0; i< right.length; i++) {
+        this.grid.rows[right[i][1]][right[i][0]].transformTileType(this.TYPES.void)
+      }
+    }
+
+    if((up.length + down.length) >= 2) {
+      this.transformTileType(this.TYPES.void)
+
+      for(var i=0; i< up.length; i++) {
+        this.grid.rows[up[i][1]][up[i][0]].transformTileType(this.TYPES.void)
+      }
+      for(var i=0; i< down.length; i++) {
+        this.grid.rows[down[i][1]][down[i][0]].transformTileType(this.TYPES.void)
+      }
+    }
+
+    // Perform deletion w/same logic if either total is true across the axis
+  }
+
+  this.matchCheckLeft = function(match) {
+    if(this.x === 0 || this.empty || this.moving) {
+      return match;
+    }
+
+    var target = this.grid.rows[this.y][this.x-1]
+
+    if(target.type.color !== this.type.color){
+      return match;
+    } else {
+      match.push([target.x, target.y])
+      return target.matchCheckLeft(match);
+    }
+  }
+
+  this.matchCheckRight = function(match) {
+    if((this.x + 1) >= this.grid.WIDTH || this.empty || this.moving) {
+      return match;
+    }
+
+    var target = this.grid.rows[this.y][this.x+1]
+
+    if(target.type.color !== this.type.color){
+      return match;
+    } else {
+      match.push([target.x, target.y]);
+      return target.matchCheckRight(match);
+    }
+  }
+
+  this.matchCheckUp = function(match) {
+    if(this.y === 0 || this.empty || this.moving) {
+      return match;
+    }
+
+    var target = this.grid.rows[this.y - 1][this.x]
+
+    if(target.type.color !== this.type.color){
+      return match;
+    } else {
+      match.push([target.x, target.y]);
+      return target.matchCheckUp(match);
+    }
+  }
+  this.matchCheckDown = function(match) {
+    if((this.y + 1) >= this.grid.HEIGHT || this.empty || this.moving) {
+      return match;
+    }
+
+    var target = this.grid.rows[this.y + 1][this.x]
+
+    if(target.type.color !== this.type.color){
+      return match;
+    } else {
+      match.push([target.x, target.y]);
+      return target.matchCheckDown(match);
+    }
+  }
+
+  this.transformTileType = function(type) {
+    this.type = type;
+    this.updateFromType();
+
+    if(this.y > 0) {
+      this.grid.rows[this.y-1][this.x].gravity()
     }
   }
 }

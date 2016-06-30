@@ -9,10 +9,16 @@ var Model_Grid = function(){
   this.HEIGHT = 12;
 
   this.CURSOR_MOVE_DELAY = 100;
-  this.CURSOR_SWAP_DELAY = 150;
-  this.GRAVITY_DELAY = 100;
+  this.CURSOR_SWAP_DELAY = 500;
+  this.GRAVITY_DELAY = 1000;
+
+  this.NUDGE_DELAY = 1000;
+  // this.CURSOR_SWAP_DELAY = 150;
+  // this.GRAVITY_DELAY = 100;
+
   this.cursorMoveDelay = 0;
   this.cursorSwapDelay = 0;
+  this.nudgeDelay = 0;
   this.cursorMoved = false;
 
   this.rows = [];
@@ -28,6 +34,7 @@ var Model_Grid = function(){
       }
       this.rows.push(row);
     }
+
     // Gravity Testing
     for(var i=0; i<this.HEIGHT; i++) {
       for(var j=0; j<this.WIDTH; j++) {
@@ -47,16 +54,19 @@ var Model_Grid = function(){
   this.moveCursor = function() {
     if(this.cursorMoveDelay <= 0) {
       if(Keyboard.map.left) {
-        this.moveX(-1)
+        this.moveX(-1);
       }
       if(Keyboard.map.right) {
-        this.moveX(1)
+        this.moveX(1);
       }
       if(Keyboard.map.up) {
-        this.moveY(-1)
+        this.moveY(-1);
       }
       if(Keyboard.map.down) {
-        this.moveY(1)
+        this.moveY(1);
+      }
+      if(Keyboard.map.nudge) {
+        this.nudge();
       }
     }
 
@@ -105,5 +115,8 @@ var Model_Grid = function(){
         this.grid.rows[y - 1][rx].gravity();
       }
     });
+  }
+  this.nudge = function() {
+    // TODO: Add blocks underneath shunting other rows upwards
   }
 }
