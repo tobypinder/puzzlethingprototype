@@ -1,4 +1,4 @@
-var Model_Grid = function(model){
+var Model_Grid = function(){
   this.model = null;
 
   this.cursorLX = 2;
@@ -22,7 +22,8 @@ var Model_Grid = function(model){
     for(var i=0; i<this.HEIGHT; i++) {
       var row = [];
       for(var j=0; j<this.WIDTH; j++) {
-        row[j] = new Model_Tile(model);
+        row[j] = new Model_Tile();
+        row[j].init(model, j, i);
       }
       this.rows.push(row);
     }
@@ -84,24 +85,12 @@ var Model_Grid = function(model){
     }
   }
   this.swap = function() {
-    y  = this.cursorY;
-    lx = this.cursorLX;
-    rx = this.cursorRX;
+    var y  = this.cursorY;
+    var lx = this.cursorLX;
+    var rx = this.cursorRX;
 
-    this.rows[y][lx].moving = true;
-    this.rows[y][rx].moving = true;
-
-    setTimeout(function(){
-      var left = this.rows[y][lx];
-      var right = this.rows[y][rx];
-
-      this.rows[y][lx] = right;
-      this.rows[y][rx] = left;
-
-      this.rows[y][lx].moving = false;
-      this.rows[y][rx].moving = false;
-    }.bind(this), this.CURSOR_SWAP_DELAY);
+    this.rows[y][lx].swapWith(y, rx, this.CURSOR_SWAP_DELAY, function(){
+      //console.log('Callback fired: ['+y+']['+lx+'] => ['+y+']['+rx+']');
+    });
   }
-
-  this.init(model);
 }

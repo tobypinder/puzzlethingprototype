@@ -34,10 +34,28 @@ var View_Grid = function(){
   }
 
   this.renderTileBackground = function(i, j) {
-    var x = this.baseX + (i * this.tileWidth);
-    var y = this.baseY + (j * this.tileHeight);
-
     this.ctx.fillStyle = "#" + this.model.grid.rows[j][i].color;
+
+    if(this.model.grid.rows[j][i].moving === true) {
+      var tile = this.model.grid.rows[j][i];
+
+      var animLength = tile.moveFinish - tile.moveStart
+      var percentage = (Main.lastMS - tile.moveStart) / animLength
+
+      // sin^2 easing
+      percentage = Math.sin(percentage * Math.PI * 0.5)
+      percentage = Math.pow(percentage, 2)
+
+      var posI = ((1 - percentage) * tile.x)  + (percentage * tile.moveTarget.x)
+      var posJ = ((1 - percentage) * tile.y)  + (percentage * tile.moveTarget.y)
+
+      var x = this.baseX + (posI * this.tileWidth);
+      var y = this.baseY + (posJ * this.tileHeight);
+    }else {
+      var x = this.baseX + (i * this.tileWidth);
+      var y = this.baseY + (j * this.tileHeight);
+    }
+
     this.ctx.fillRect(x, y, this.tileWidth, this.tileHeight)
   }
 
