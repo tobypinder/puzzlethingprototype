@@ -10,6 +10,7 @@ var Model_Grid = function(){
 
   this.CURSOR_MOVE_DELAY = 100;
   this.CURSOR_SWAP_DELAY = 150;
+  this.GRAVITY_DELAY = 100;
   this.cursorMoveDelay = 0;
   this.cursorSwapDelay = 0;
   this.cursorMoved = false;
@@ -26,6 +27,12 @@ var Model_Grid = function(){
         row[j].init(model, j, i);
       }
       this.rows.push(row);
+    }
+    // Gravity Testing
+    for(var i=0; i<this.HEIGHT; i++) {
+      for(var j=0; j<this.WIDTH; j++) {
+        this.rows[i][j].gravity();
+      }
     }
   };
   this.step = function(ms){
@@ -89,8 +96,14 @@ var Model_Grid = function(){
     var lx = this.cursorLX;
     var rx = this.cursorRX;
 
-    this.rows[y][lx].swapWith(y, rx, this.CURSOR_SWAP_DELAY, function(){
-      //console.log('Callback fired: ['+y+']['+lx+'] => ['+y+']['+rx+']');
+    this.rows[y][lx].swapWith(y, rx, this.CURSOR_SWAP_DELAY, function(target){
+      this.gravity();
+      target.gravity();
+
+      if(y > 0) {
+        this.grid.rows[y - 1][lx].gravity();
+        this.grid.rows[y - 1][rx].gravity();
+      }
     });
   }
 }

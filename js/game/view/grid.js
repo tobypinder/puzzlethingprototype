@@ -34,7 +34,7 @@ var View_Grid = function(){
   }
 
   this.renderTileBackground = function(i, j) {
-    this.ctx.fillStyle = "#" + this.model.grid.rows[j][i].color;
+    this.ctx.fillStyle = this.model.grid.rows[j][i].color;
 
     if(this.model.grid.rows[j][i].moving === true) {
       var tile = this.model.grid.rows[j][i];
