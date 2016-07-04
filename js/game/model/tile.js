@@ -162,12 +162,10 @@ var Model_Tile = function(){
   }
 
   this.matchCheck = function() {
-    if(this.invalidMatch())
-    {
+    if(this.invalidMatch()) {
       return false;
     }
-    // this.checkLeft() + this.checkRight() >= 2
-    // this.checkUp() + this.checkDown() >= 2
+
     var left  = this.matchCheckLeft([]);
     var right = this.matchCheckRight([]);
     var up    = this.matchCheckUp([]);
@@ -194,8 +192,6 @@ var Model_Tile = function(){
         this.grid.rows[down[i][1]][down[i][0]].transformTileType(this.TYPES.void)
       }
     }
-
-    // Perform deletion w/same logic if either total is true across the axis
   }
 
   this.matchCheckLeft = function(match) {

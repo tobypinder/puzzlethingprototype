@@ -35,7 +35,7 @@ var View_Grid = function(){
     }
 
     this.renderGridBackground();
-    //this.renderGridMask();
+    this.renderGridMask();
 
     this.renderCross(this.model.grid.cursorLX, this.model.grid.cursorY);
     this.renderCross(this.model.grid.cursorRX, this.model.grid.cursorY);
@@ -73,7 +73,7 @@ var View_Grid = function(){
 
     //if(j == this.model.grid.HEIGHT - 1) {
     if(this.model.grid.rows[j][i].locked === true) {
-      this.ctx.fillStyle = 'rgba(0, 0, 0, ' + (((Main.frameNumber % 30) / 100) + 0.5) + ')'
+      this.ctx.fillStyle = 'rgba(0, 0, 0, 0.4)'
       this.ctx.fillRect(x, y, this.tileWidth, this.tileHeight)
     }
   }

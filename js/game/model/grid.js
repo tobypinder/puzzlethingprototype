@@ -42,10 +42,11 @@ var Model_Grid = function(){
       this.rows.push(row);
     }
 
-    // Gravity Testing
+    // Gravity and match testing
     for(var i=0; i<this.HEIGHT; i++) {
       for(var j=0; j<this.WIDTH; j++) {
         this.rows[i][j].gravity();
+        this.rows[i][j].matchCheck();
       }
     }
   };
