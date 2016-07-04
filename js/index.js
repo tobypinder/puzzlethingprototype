@@ -14,7 +14,7 @@ $(function() {
   $.each(scripts, function(index, value) {
     var path = 'js/game/' + value + '.js'
     $.getScript(path).done(function(){
-      //console.log('Loaded '+ path)
+      // console.log('Loaded '+ path)
       loaded++;
 
       if(loaded == scripts.length) {

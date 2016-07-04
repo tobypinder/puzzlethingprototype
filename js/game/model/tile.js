@@ -38,6 +38,7 @@ var Model_Tile = function(){
   this.type = null;
   this.color = '000';
   this.moving = false;
+  this.locked = false;
   this.moveTarget = null;
   this.moveStart  = 0;
   this.moveFinish = 0;
@@ -47,34 +48,46 @@ var Model_Tile = function(){
   this.init = function(model, x, y, factory){
     this.model = model;
     this.grid  = model.grid;
+    // factory: init | nudge
+    if(factory === 'nudge') {
+      this.lock();
+    }
 
     this.x     = x;
     this.y     = y;
 
-    switch(parseInt(Math.random() * (factory === 'filled' ? 6 : 10))) {
-      case 0:
-        this.type = this.TYPES.red;
-        break;
-      case 1:
-        this.type = this.TYPES.green;
-        break;
-      case 2:
-        this.type = this.TYPES.blue;
-        break;
-      case 3:
-        this.type = this.TYPES.yellow;
-        break;
-      case 4:
-        this.type = this.TYPES.magenta;
-        break;
-      case 5:
-        this.type = this.TYPES.cyan;
-        break;
-      default:
-        this.type = this.TYPES.void;
-        break;
+    if(factory == 'init' && this.y < this.grid.START_HEIGHT) {
+      this.type = this.TYPES.void;
+    } else {
+      switch(parseInt(Math.random() * 6)) {
+        case 0:
+          this.type = this.TYPES.red;
+          break;
+        case 1:
+          this.type = this.TYPES.green;
+          break;
+        case 2:
+          this.type = this.TYPES.blue;
+          break;
+        case 3:
+          this.type = this.TYPES.yellow;
+          break;
+        case 4:
+          this.type = this.TYPES.magenta;
+          break;
+        case 5:
+          this.type = this.TYPES.cyan;
+          break;
+        default:
+          this.type = this.TYPES.void;
+          break;
+      }
     }
     this.updateFromType()
+  }
+
+  this.invalidMatch = function() {
+    return this.empty === true || this.moving === true || this.locked === true
   }
 
   this.updateFromType = function(){
@@ -86,7 +99,7 @@ var Model_Tile = function(){
     var target = this.grid.rows[ty][tx];
 
     if(target.moving || this.moving) {
-      return false
+      return false;
     }
 
     this.grid.rows[ty][tx].moving = true;
@@ -149,6 +162,10 @@ var Model_Tile = function(){
   }
 
   this.matchCheck = function() {
+    if(this.invalidMatch())
+    {
+      return false;
+    }
     // this.checkLeft() + this.checkRight() >= 2
     // this.checkUp() + this.checkDown() >= 2
     var left  = this.matchCheckLeft([]);
@@ -182,11 +199,11 @@ var Model_Tile = function(){
   }
 
   this.matchCheckLeft = function(match) {
-    if(this.x === 0 || this.empty || this.moving) {
+    if(this.x === 0 || this.invalidMatch()) {
       return match;
     }
 
-    var target = this.grid.rows[this.y][this.x-1]
+    var target = this.grid.rows[this.y][this.x - 1];
 
     if(target.type.color !== this.type.color){
       return match;
@@ -197,11 +214,11 @@ var Model_Tile = function(){
   }
 
   this.matchCheckRight = function(match) {
-    if((this.x + 1) >= this.grid.WIDTH || this.empty || this.moving) {
+    if((this.x + 1) >= this.grid.WIDTH || this.invalidMatch()) {
       return match;
     }
 
-    var target = this.grid.rows[this.y][this.x+1]
+    var target = this.grid.rows[this.y][this.x + 1];
 
     if(target.type.color !== this.type.color){
       return match;
@@ -212,11 +229,11 @@ var Model_Tile = function(){
   }
 
   this.matchCheckUp = function(match) {
-    if(this.y === 0 || this.empty || this.moving) {
+    if(this.y === 0 || this.invalidMatch()) {
       return match;
     }
 
-    var target = this.grid.rows[this.y - 1][this.x]
+    var target = this.grid.rows[this.y - 1][this.x];
 
     if(target.type.color !== this.type.color){
       return match;
@@ -226,11 +243,11 @@ var Model_Tile = function(){
     }
   }
   this.matchCheckDown = function(match) {
-    if((this.y + 1) >= this.grid.HEIGHT || this.empty || this.moving) {
+    if((this.y + 1) >= this.grid.HEIGHT || this.invalidMatch()) {
       return match;
     }
 
-    var target = this.grid.rows[this.y + 1][this.x]
+    var target = this.grid.rows[this.y + 1][this.x];
 
     if(target.type.color !== this.type.color){
       return match;
@@ -247,5 +264,14 @@ var Model_Tile = function(){
     if(this.y > 0) {
       this.grid.rows[this.y-1][this.x].gravity()
     }
+  }
+
+  this.lock = function() {
+    this.locked = true;
+  }
+
+  this.unlock = function() {
+    this.locked = false;
+    this.matchCheck();
   }
 }

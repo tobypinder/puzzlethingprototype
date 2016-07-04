@@ -8,6 +8,7 @@ var Model_Grid = function(){
   this.WIDTH  = 6;
   this.HEIGHT = 13;
   this.ACTIVE_HEIGHT = this.HEIGHT - 1;
+  this.START_HEIGHT = 7;
 
   this.CURSOR_MOVE_DELAY = 130;
   this.NUDGE_DELAY = 700;
@@ -15,7 +16,7 @@ var Model_Grid = function(){
 
   //this.CURSOR_SWAP_DELAY = 500;
   //this.GRAVITY_DELAY = 1000;
-  this.CURSOR_SWAP_DELAY = 150;
+  this.CURSOR_SWAP_DELAY = 175;
   this.GRAVITY_DELAY = 100;
 
   this.cursorMoveDelay = 0;
@@ -32,7 +33,11 @@ var Model_Grid = function(){
       var row = [];
       for(var j=0; j<this.WIDTH; j++) {
         row[j] = new Model_Tile();
-        row[j].init(model, j, i);
+        row[j].init(model, j, i, 'init');
+
+        if(i == this.HEIGHT - 1) {
+          row[j].lock();
+        }
       }
       this.rows.push(row);
     }
@@ -141,17 +146,10 @@ var Model_Grid = function(){
     }.bind(this));
 
     if(emptyAtTop) {
-      // Remove top row, add filled bottom row.
+      // Remove top row
       this.rows.shift();
 
-      var blocks = [];
-      for(var i=0;i<this.WIDTH;i++) {
-        var tile = new Model_Tile();
-        tile.init(this.model, i, this.HEIGHT-1, 'filled');
-
-        blocks.push(tile);
-      }
-
+      // Update Y Metadata for all blocks.
       for(var y=0;y<(this.HEIGHT-1);y++)
       {
         for(var x=0;x<this.WIDTH;x++) {
@@ -159,10 +157,21 @@ var Model_Grid = function(){
         }
       }
 
+      // Add filled bottom row.
+      var blocks = [];
+      for(var i=0; i<this.WIDTH; i++) {
+        // Create new tile.
+        var tile = new Model_Tile();
+        tile.init(this.model, i, this.HEIGHT-1, 'nudge');
+
+        blocks.push(tile);
+      }
+
       this.rows.push(blocks)
 
-      $.each(blocks, function(idx){
-        blocks[idx].matchCheck();
+      // Unlock tiles above and check for matches.
+      $.each(this.rows[this.HEIGHT-2], function(idx){
+        this.rows[this.HEIGHT - 2][idx].unlock();
       }.bind(this));
     }
 

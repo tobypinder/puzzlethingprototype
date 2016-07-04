@@ -4,6 +4,7 @@ var Main = {
   lastMS: 0,
   frameNumber: 0,
   frameRate: 0,
+  STATES: [],
   init: function(){
     this.model = new Model();
     this.model.init();
