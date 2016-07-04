@@ -143,7 +143,7 @@ var Model_Tile = function(){
   this.gravity = function()
   {
     // Empty tiles cannot "fall"
-    if(this.empty === false && this.moving === false)
+    if(!this.invalidMatch())
     {
       if((this.y+1) < this.grid.HEIGHT && this.grid.rows[this.y + 1][this.x].empty === true){
         // Tile is above empty space.
@@ -201,7 +201,7 @@ var Model_Tile = function(){
 
     var target = this.grid.rows[this.y][this.x - 1];
 
-    if(target.type.color !== this.type.color){
+    if(target.invalidMatch() || target.type.color !== this.type.color){
       return match;
     } else {
       match.push([target.x, target.y])
@@ -216,7 +216,7 @@ var Model_Tile = function(){
 
     var target = this.grid.rows[this.y][this.x + 1];
 
-    if(target.type.color !== this.type.color){
+    if(target.invalidMatch() || target.type.color !== this.type.color){
       return match;
     } else {
       match.push([target.x, target.y]);
@@ -231,7 +231,7 @@ var Model_Tile = function(){
 
     var target = this.grid.rows[this.y - 1][this.x];
 
-    if(target.type.color !== this.type.color){
+    if(target.invalidMatch() || target.type.color !== this.type.color){
       return match;
     } else {
       match.push([target.x, target.y]);
@@ -245,7 +245,7 @@ var Model_Tile = function(){
 
     var target = this.grid.rows[this.y + 1][this.x];
 
-    if(target.type.color !== this.type.color){
+    if(target.invalidMatch() || target.type.color !== this.type.color){
       return match;
     } else {
       match.push([target.x, target.y]);
