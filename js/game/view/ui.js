@@ -10,6 +10,6 @@ View_UI = function(){
     this.ctx.font="8px";
     this.ctx.textAlign = "center";
     this.ctx.fillStyle="#ffffff";
-    this.ctx.fillText('FPS: ' + Main.frameRate, this.view.renderHeight/2, this.view.renderWidth/2)
+    this.ctx.fillText('FPS: ' + Main.frameRate, this.view.renderWidth/2, this.view.renderHeight/2)
   }
 };

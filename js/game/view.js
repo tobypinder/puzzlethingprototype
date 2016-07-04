@@ -2,10 +2,10 @@ var View = function(){
   this.ctx = null;
   this.model = null;
   this.ui = null;
-  this.canvasHeight = 800;
-  this.canvasWidth = 600;
-  this.renderHeight = 200;
-  this.renderWidth = 150;
+  this.canvasWidth = 800;
+  this.canvasHeight = 600;
+  this.renderWidth = 200;
+  this.renderHeight = 150;
   this.renderScaleX = function()
   {
     return this.canvasHeight / this.renderHeight
@@ -41,7 +41,7 @@ var View = function(){
   this.wipe = function()
   {
     this.ctx.fillStyle = '#111111';
-    this.ctx.fillRect(0, 0, this.canvasHeight, this.canvasWidth);
+    this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
   };
 
   this.pushState = function()

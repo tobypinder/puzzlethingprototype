@@ -44,14 +44,14 @@ var Model_Tile = function(){
   this.x = -1;
   this.y = -1;
 
-  this.init = function(model, x, y){
+  this.init = function(model, x, y, factory){
     this.model = model;
     this.grid  = model.grid;
 
     this.x     = x;
     this.y     = y;
 
-    switch(parseInt(Math.random() * 10)) {
+    switch(parseInt(Math.random() * (factory === 'filled' ? 6 : 10))) {
       case 0:
         this.type = this.TYPES.red;
         break;

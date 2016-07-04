@@ -43,8 +43,8 @@ var View_Grid = function(){
       var percentage = (Main.lastMS - tile.moveStart) / animLength
 
       // sin^2 easing
-      //percentage = Math.sin(percentage * Math.PI * 0.5)
-      //percentage = Math.pow(percentage, 2)
+      percentage = Math.sin(percentage * Math.PI * 0.5)
+      percentage = Math.pow(percentage, 2)
 
       var posI = ((1 - percentage) * tile.x)  + (percentage * tile.moveTarget.x)
       var posJ = ((1 - percentage) * tile.y)  + (percentage * tile.moveTarget.y)

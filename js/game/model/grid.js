@@ -9,12 +9,12 @@ var Model_Grid = function(){
   this.HEIGHT = 12;
 
   this.CURSOR_MOVE_DELAY = 100;
-  this.CURSOR_SWAP_DELAY = 500;
-  this.GRAVITY_DELAY = 1000;
+  this.NUDGE_DELAY = 700;
 
-  this.NUDGE_DELAY = 1000;
-  // this.CURSOR_SWAP_DELAY = 150;
-  // this.GRAVITY_DELAY = 100;
+  //this.CURSOR_SWAP_DELAY = 500;
+  //this.GRAVITY_DELAY = 1000;
+  this.CURSOR_SWAP_DELAY = 150;
+  this.GRAVITY_DELAY = 100;
 
   this.cursorMoveDelay = 0;
   this.cursorSwapDelay = 0;
@@ -50,6 +50,7 @@ var Model_Grid = function(){
   this.decrementDelays = function(ms) {
     this.cursorMoveDelay = this.cursorMoveDelay - ms
     this.cursorSwapDelay = this.cursorSwapDelay - ms
+    this.nudgeDelay = this.nudgeDelay - ms
   }
   this.moveCursor = function() {
     if(this.cursorMoveDelay <= 0) {
@@ -65,6 +66,8 @@ var Model_Grid = function(){
       if(Keyboard.map.down) {
         this.moveY(1);
       }
+    }
+    if(this.nudgeDelay < 0) {
       if(Keyboard.map.nudge) {
         this.nudge();
       }
@@ -116,7 +119,38 @@ var Model_Grid = function(){
       }
     });
   }
+
   this.nudge = function() {
-    // TODO: Add blocks underneath shunting other rows upwards
+    var emptyAtTop = true;
+
+    $.each(this.rows[0], function(idx) {
+      if(this.rows[0][idx].empty !== true) {
+        emptyAtTop = false;
+      }
+    }.bind(this));
+
+    if(emptyAtTop) {
+      // Remove top row, add filled bottom row.
+      this.rows.shift();
+
+      var blocks = [];
+      for(var i=0;i<this.WIDTH;i++) {
+        var tile = new Model_Tile();
+        tile.init(this.model, i, this.HEIGHT-1, 'filled');
+
+        blocks.push(tile);
+      }
+
+      for(var y=0;y<(this.HEIGHT-1);y++)
+      {
+        for(var x=0;x<this.WIDTH;x++) {
+          this.rows[y][x].y = y
+        }
+      }
+
+      this.rows.push(blocks)
+    }
+
+    this.nudgeDelay = this.NUDGE_DELAY;
   }
 }
