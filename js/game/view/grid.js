@@ -7,10 +7,19 @@ var View_Grid = function(){
   this.tileWidth = 12;
   this.tileHeight = 12;
 
-  this.gridWidth = 6;
-  this.gridHeight = 12;
-
   this.lineWidth = 1;
+
+  this.nudgeY = function() {
+    return parseInt(this.model.grid.rollingNudgeMS / this.model.grid.ROLLING_NUDGE_TIMER * this.tileHeight * 4) / 4
+  }
+
+  this.totalGridWidth = function() {
+    return this.tileWidth * this.model.grid.WIDTH;
+  }
+
+  this.totalGridHeight = function() {
+    return this.tileHeight * this.model.grid.ACTIVE_HEIGHT;
+  }
 
   this.init = function(view){
     this.view  = view;
@@ -19,23 +28,25 @@ var View_Grid = function(){
   };
   this.render = function() {
     // TODO: Render the grid.
-    for(var i=0; i<this.gridWidth; i++) {
-      for(var j=0; j<this.gridHeight; j++) {
+    for(var i=0; i<this.model.grid.WIDTH; i++) {
+      for(var j=0; j<this.model.grid.HEIGHT; j++) {
         this.renderCell(i, j);
       }
     }
+
+    this.renderGridBackground();
+
+    this.renderGridMask();
 
     this.renderCross(this.model.grid.cursorLX, this.model.grid.cursorY);
     this.renderCross(this.model.grid.cursorRX, this.model.grid.cursorY);
   };
 
   this.renderCell = function(i, j) {
-    this.renderTileBackground(i, j);
+    this.renderTile(i, j);
   }
 
-  this.renderTileBackground = function(i, j) {
-    this.ctx.fillStyle = this.model.grid.rows[j][i].color;
-
+  this.renderTile = function(i, j) {
     if(this.model.grid.rows[j][i].moving === true) {
       var tile = this.model.grid.rows[j][i];
 
@@ -56,12 +67,20 @@ var View_Grid = function(){
       var y = this.baseY + (j * this.tileHeight);
     }
 
+    y = y - this.nudgeY();
+
+    this.ctx.fillStyle = this.model.grid.rows[j][i].color;
     this.ctx.fillRect(x, y, this.tileWidth, this.tileHeight)
+
+    if(j == this.model.grid.HEIGHT - 1) {
+      this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+      this.ctx.fillRect(x, y, this.tileWidth, this.tileHeight)
+    }
   }
 
   this.renderCross = function(i, j) {
     var x = this.baseX + (i * this.tileWidth);
-    var y = this.baseY + (j * this.tileHeight);
+    var y = this.baseY + (j * this.tileHeight) - this.nudgeY();
 
     this.ctx.strokeStyle = '#fff';
     this.ctx.lineWidth = this.lineWidth;
@@ -90,4 +109,50 @@ var View_Grid = function(){
 
     this.ctx.stroke();
   };
+
+  this.renderGridBackground = function() {
+    this.ctx.strokeStyle = '#999';
+    this.ctx.strokeRect(
+      this.baseX,
+      this.baseY,
+      this.totalGridWidth(),
+      this.totalGridHeight()
+    )
+  }
+
+  this.renderGridMask = function(){
+    this.ctx.fillStyle = '#999';
+
+    // Top
+    this.ctx.fillRect(
+      0,
+      0,
+      this.totalGridWidth() + (2 * this.baseX),
+      this.baseY
+    )
+
+    // Bottom
+    this.ctx.fillRect(
+      0,
+      this.totalGridHeight() + this.baseY,
+      this.totalGridWidth() + (2 * this.baseX),
+      this.baseY
+    )
+
+    // Left
+    this.ctx.fillRect(
+      0,
+      0,
+      this.baseX,
+      this.totalGridHeight() + (2 * this.baseY)
+    )
+
+    // Left
+    this.ctx.fillRect(
+      this.totalGridWidth() + this.baseX,
+      0,
+      this.baseX,
+      this.totalGridHeight() + (2 * this.baseY)
+    )
+  }
 }

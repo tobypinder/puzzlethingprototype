@@ -6,10 +6,12 @@ var Model_Grid = function(){
   this.cursorY  = 6;
 
   this.WIDTH  = 6;
-  this.HEIGHT = 12;
+  this.HEIGHT = 13;
+  this.ACTIVE_HEIGHT = this.HEIGHT - 1;
 
-  this.CURSOR_MOVE_DELAY = 100;
+  this.CURSOR_MOVE_DELAY = 130;
   this.NUDGE_DELAY = 700;
+  this.ROLLING_NUDGE_TIMER = 8000
 
   //this.CURSOR_SWAP_DELAY = 500;
   //this.GRAVITY_DELAY = 1000;
@@ -19,8 +21,8 @@ var Model_Grid = function(){
   this.cursorMoveDelay = 0;
   this.cursorSwapDelay = 0;
   this.nudgeDelay = 0;
+  this.rollingNudgeMS = 0;
   this.cursorMoved = false;
-
   this.rows = [];
 
   this.init = function(model){
@@ -48,9 +50,15 @@ var Model_Grid = function(){
     this.swapCursor();
   }
   this.decrementDelays = function(ms) {
-    this.cursorMoveDelay = this.cursorMoveDelay - ms
-    this.cursorSwapDelay = this.cursorSwapDelay - ms
-    this.nudgeDelay = this.nudgeDelay - ms
+    this.cursorMoveDelay -= ms
+    this.cursorSwapDelay -= ms
+    this.nudgeDelay -= ms
+    this.rollingNudgeMS += ms
+
+    if(this.rollingNudgeMS > this.ROLLING_NUDGE_TIMER) {
+      this.rollingNudgeMS -= this.ROLLING_NUDGE_TIMER
+      this.nudge(false)
+    }
   }
   this.moveCursor = function() {
     if(this.cursorMoveDelay <= 0) {
@@ -69,7 +77,7 @@ var Model_Grid = function(){
     }
     if(this.nudgeDelay < 0) {
       if(Keyboard.map.nudge) {
-        this.nudge();
+        this.nudge(true);
       }
     }
 
@@ -98,7 +106,7 @@ var Model_Grid = function(){
     }
   }
   this.moveY = function(delta) {
-    if(this.cursorY + delta >= 0 && this.cursorY + delta < this.HEIGHT)
+    if(this.cursorY + delta >= 0 && this.cursorY + delta < this.ACTIVE_HEIGHT)
     {
       this.cursorY += delta;
       this.cursorMoved = true;
@@ -120,8 +128,11 @@ var Model_Grid = function(){
     });
   }
 
-  this.nudge = function() {
+  this.nudge = function(forced) {
     var emptyAtTop = true;
+
+    // TODO: Only check and prevent if force = false. If false = true and overflowing, then
+    // gameover or start the gameover timer.
 
     $.each(this.rows[0], function(idx) {
       if(this.rows[0][idx].empty !== true) {
@@ -149,6 +160,10 @@ var Model_Grid = function(){
       }
 
       this.rows.push(blocks)
+
+      $.each(blocks, function(idx){
+        blocks[idx].matchCheck();
+      }.bind(this));
     }
 
     this.nudgeDelay = this.NUDGE_DELAY;

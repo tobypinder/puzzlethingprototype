@@ -1,5 +1,5 @@
 v0.1 - Functional Base PL Implementation.
-  Nudge
+  Prevent Nudge gravity cascade - Timing Issue?
   Fix "type" - extract as object and remove "local" shadows.
   Match animation and "hangtime"
   Gravitational "Hangtime"
@@ -8,5 +8,5 @@ v0.1 - Functional Base PL Implementation.
 v0.2 Basic Quality Pass
   Replace JQ with Underscore + Some Module Loading infrastructure (Gulp)
   Basic Art Pass
-  Debug + QOL
+  Debug + QOL -  Edge cases with gravity?
   Tile generation factories - avoid pre-matches for generating rows/initial state.

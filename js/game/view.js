@@ -58,7 +58,8 @@ var View = function(){
 
   this.startNudge = function()
   {
-    this.ctx.translate(-0.5, -0.5);
+    // Disabled antialias nudge - must be a better method!
+    // this.ctx.translate(-0.5, -0.5);
   }
 
   this.startScale = function()
