@@ -1,4 +1,4 @@
-var View_Grid = function(){
+var View_Match_Grid = function(){
   this.model = null;
   this.view = null;
   this.ctx = null;

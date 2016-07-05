@@ -21,10 +21,10 @@ var View = function(){
 
     this.model = model;
 
-    this.ui = new View_UI();
+    this.ui = new View_Match_UI();
     this.ui.init(this);
 
-    this.grid = new View_Grid();
+    this.grid = new View_Match_Grid();
     this.grid.init(this);
   };
   this.step = function(ms)

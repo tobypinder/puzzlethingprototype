@@ -4,8 +4,10 @@ var Main = {
   lastMS: 0,
   frameNumber: 0,
   frameRate: 0,
-  STATES: [],
+  gameState: null,
   init: function(){
+    this.gameState = Model_States.match
+
     this.model = new Model();
     this.model.init();
 
@@ -31,5 +33,8 @@ var Main = {
     this.frameRate = (1000 / stepMS).toFixed(2);
 
     return stepMS;
+  },
+  transitionStateTo: function(state){
+    this.gameState = state;
   }
 };

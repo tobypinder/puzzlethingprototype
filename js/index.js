@@ -4,11 +4,12 @@ $(function() {
     'main',
     'model',
     'model/grid',
+    'model/state',
     'model/tile',
     'model/tile_type',
     'view',
-    'view/ui',
-    'view/grid',
+    'view/match_ui',
+    'view/match_grid',
     'keyboard'
   ];
 

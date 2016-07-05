@@ -1,4 +1,4 @@
-View_UI = function(){
+var View_Match_UI = function(){
   this.view = null;
   this.ctx = null;
   this.init = function(view){
