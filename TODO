@@ -1,4 +1,5 @@
 v0.1 - Functional Base PL Implementation.
+  Migrate Grid inside new "game" model. A game represents one instance
   Prevent Nudge gravity cascade - Timing Issue?
   Match animation and "hangtime"
   Gravitational "Hangtime"

@@ -3,8 +3,10 @@ $(function() {
   var scripts = [
     'main',
     'model',
+    'model/game',
     'model/grid',
     'model/state',
+    'model/stats',
     'model/tile',
     'model/tile_type',
     'view',

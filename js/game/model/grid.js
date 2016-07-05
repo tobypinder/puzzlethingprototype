@@ -1,5 +1,6 @@
 var Model_Grid = function(){
   this.model = null;
+  this.stats = null;
 
   this.cursorLX = 2;
   this.cursorRX = 3;
@@ -26,14 +27,15 @@ var Model_Grid = function(){
   this.cursorMoved = false;
   this.rows = [];
 
-  this.init = function(model){
-    this.model = model;
+  this.init = function(stats){
+    this.stats = stats;
+    this.model = stats.model;
 
     for(var i=0; i<this.HEIGHT; i++) {
       var row = [];
       for(var j=0; j<this.WIDTH; j++) {
         row[j] = new Model_Tile();
-        row[j].init(model, j, i, 'init');
+        row[j].init(this, j, i, 'init');
 
         if(i == this.HEIGHT - 1) {
           row[j].lock();
@@ -172,7 +174,7 @@ var Model_Grid = function(){
       for(var i=0; i<this.WIDTH; i++) {
         // Create new tile.
         var tile = new Model_Tile();
-        tile.init(this.model, i, this.HEIGHT-1, 'nudge');
+        tile.init(this, i, this.HEIGHT-1, 'nudge');
 
         blocks.push(tile);
       }

@@ -1,10 +1,13 @@
 var Model = function(){
   this.grid = null;
+  this.game = null;
   this.init = function(){
-    this.grid = new Model_Grid();
-    this.grid.init(this);
+    this.game = new Model_Game();
+    this.game.init(this);
+
+    this.grid = this.game.player_grid
   }
   this.step = function(ms){
-    this.grid.step(ms);
+    this.game.step(ms);
   }
 };

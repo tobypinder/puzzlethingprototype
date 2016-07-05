@@ -12,9 +12,9 @@ var Model_Tile = function(){
   this.x = -1;
   this.y = -1;
 
-  this.init = function(model, x, y, factory){
-    this.model = model;
-    this.grid  = model.grid;
+  this.init = function(grid, x, y, factory){
+    this.model = grid.model;
+    this.grid  = grid;
     // factory: init | nudge
     if(factory === 'nudge') {
       this.lock();
@@ -132,8 +132,9 @@ var Model_Tile = function(){
     var up    = this.matchCheckUp([]);
     var down  = this.matchCheckDown([]);
 
+    var matched = false;
     if(left.length + right.length >= 2) {
-      this.transformTileType(Model_Tile_Types.void)
+      matched = true;
 
       for(var i=0; i< left.length; i++) {
         this.grid.rows[left[i][1]][left[i][0]].transformTileType(Model_Tile_Types.void)
@@ -144,7 +145,7 @@ var Model_Tile = function(){
     }
 
     if((up.length + down.length) >= 2) {
-      this.transformTileType(Model_Tile_Types.void)
+      matched = true;
 
       for(var i=0; i< up.length; i++) {
         this.grid.rows[up[i][1]][up[i][0]].transformTileType(Model_Tile_Types.void)
@@ -153,6 +154,13 @@ var Model_Tile = function(){
         this.grid.rows[down[i][1]][down[i][0]].transformTileType(Model_Tile_Types.void)
       }
     }
+
+    if(matched === true) {
+      this.transformTileType(Model_Tile_Types.void)
+      var matches = left.length + right.length + up.length + down.length + 1
+      this.grid.stats.addMatch(matches)
+    }
+
   }
 
   this.matchCheckLeft = function(match) {
