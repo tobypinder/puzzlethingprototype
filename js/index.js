@@ -8,9 +8,9 @@ $(function() {
     'model/tile',
     'model/tile_type',
     'view',
-    'view/match_ui',
-    'view/match_grid',
-    'view/results_ui',
+    'view/match/ui',
+    'view/match/grid',
+    'view/results/ui',
     'keyboard'
   ];
 
