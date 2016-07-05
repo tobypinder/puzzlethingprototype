@@ -9,3 +9,7 @@ v0.2 Basic Quality Pass
   Basic Art Pass
   Debug + QOL -  Edge cases with gravity?
   Tile generation factories - avoid pre-matches for generating rows/initial state.
+
+v0.3
+  Cards
+  CPU Opponent

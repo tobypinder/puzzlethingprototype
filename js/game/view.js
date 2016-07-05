@@ -26,6 +26,9 @@ var View = function(){
 
     this.grid = new View_Match_Grid();
     this.grid.init(this);
+
+    this.results_ui = new View_Results_UI()
+    this.results_ui.init(this);
   };
   this.step = function(ms)
   {
@@ -34,6 +37,7 @@ var View = function(){
 
     this.ui.render();
     this.grid.render();
+    this.results_ui.render();
 
     this.popState();
   };

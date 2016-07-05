@@ -10,6 +10,7 @@ $(function() {
     'view',
     'view/match_ui',
     'view/match_grid',
+    'view/results_ui',
     'keyboard'
   ];
 

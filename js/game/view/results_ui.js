@@ -1,4 +1,4 @@
-var View_Match_UI = function(){
+var View_Results_UI = function(){
   this.view = null;
   this.ctx = null;
   this.init = function(view){
@@ -7,12 +7,12 @@ var View_Match_UI = function(){
   };
   this.render = function()
   {
-    if(Main.state == Model_States.match) {
+    if(Main.state == Model_States.results) {
       this.ctx.font="8px";
       this.ctx.textAlign = "center";
       this.ctx.fillStyle="#ffffff";
       this.ctx.font = '8px pixeletterregular'
-      this.ctx.fillText('FPS: ' + Main.frameRate, this.view.renderWidth/4*2.5, this.view.renderHeight/2)
+      this.ctx.fillText('Game Over', this.view.renderWidth/4*2.5, this.view.renderHeight/2)
     }
   }
 };

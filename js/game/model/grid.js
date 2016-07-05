@@ -51,9 +51,11 @@ var Model_Grid = function(){
     }
   };
   this.step = function(ms){
-    this.decrementDelays(ms);
-    this.moveCursor();
-    this.swapCursor();
+    if(Main.state == Model_States.match) {
+      this.decrementDelays(ms);
+      this.moveCursor();
+      this.swapCursor();
+    }
   }
   this.decrementDelays = function(ms) {
     this.cursorMoveDelay -= ms
@@ -136,6 +138,7 @@ var Model_Grid = function(){
 
   this.nudge = function(forced) {
     var emptyAtTop = true;
+    var gameover = false;
 
     // TODO: Only check and prevent if force = false. If false = true and overflowing, then
     // gameover or start the gameover timer.
@@ -146,7 +149,13 @@ var Model_Grid = function(){
       }
     }.bind(this));
 
-    if(emptyAtTop) {
+    if(!emptyAtTop && forced === false) {
+      gameover = true;
+      // TODO: Some kind of backing off grace frames?
+      Main.transitionStateTo(Model_States.results)
+    }
+
+    if(emptyAtTop || (gameover === true)) {
       // Remove top row
       this.rows.shift();
 

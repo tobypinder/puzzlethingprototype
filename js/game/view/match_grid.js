@@ -37,8 +37,12 @@ var View_Match_Grid = function(){
     this.renderGridBackground();
     this.renderGridMask();
 
-    this.renderCross(this.model.grid.cursorLX, this.model.grid.cursorY);
-    this.renderCross(this.model.grid.cursorRX, this.model.grid.cursorY);
+    if(Main.state == Model_States.match) {
+      this.renderCross(this.model.grid.cursorLX, this.model.grid.cursorY);
+      this.renderCross(this.model.grid.cursorRX, this.model.grid.cursorY);
+    } else {
+      this.renderGridBlur();
+    }
   };
 
   this.renderCell = function(i, j) {
@@ -152,6 +156,16 @@ var View_Match_Grid = function(){
       this.totalGridWidth() + this.baseX,
       0,
       this.baseX,
+      this.totalGridHeight() + (2 * this.baseY)
+    )
+  }
+
+  this.renderGridBlur = function() {
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.4)'
+    this.ctx.fillRect(
+      0,
+      0,
+      this.totalGridWidth() + (2 * this.baseX),
       this.totalGridHeight() + (2 * this.baseY)
     )
   }

@@ -4,9 +4,9 @@ var Main = {
   lastMS: 0,
   frameNumber: 0,
   frameRate: 0,
-  gameState: null,
+  state: null,
   init: function(){
-    this.gameState = Model_States.match
+    this.state = Model_States.match
 
     this.model = new Model();
     this.model.init();
@@ -35,6 +35,6 @@ var Main = {
     return stepMS;
   },
   transitionStateTo: function(state){
-    this.gameState = state;
+    this.state = state;
   }
 };
