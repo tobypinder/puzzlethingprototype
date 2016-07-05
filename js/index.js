@@ -5,6 +5,7 @@ $(function() {
     'model',
     'model/grid',
     'model/tile',
+    'model/tile_type',
     'view',
     'view/ui',
     'view/grid',

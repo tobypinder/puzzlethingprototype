@@ -141,7 +141,7 @@ var Model_Grid = function(){
     // gameover or start the gameover timer.
 
     $.each(this.rows[0], function(idx) {
-      if(this.rows[0][idx].empty !== true) {
+      if(this.rows[0][idx].type.empty !== true) {
         emptyAtTop = false;
       }
     }.bind(this));

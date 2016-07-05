@@ -2,41 +2,8 @@ var Model_Tile = function(){
   this.model = null;
   this.grid = null;
 
-  this.empty = false;
-
-  this.TYPES = {
-    void: {
-      color: 'rgba(0,0,0,0)',
-      empty: true
-    },
-    red: {
-      color: '#933',
-      empty: false
-    },
-    green: {
-      color: '#393',
-      empty: false
-    },
-    blue: {
-      color: '#339',
-      empty: false
-    },
-    yellow: {
-      color: '#993',
-      empty: false
-    },
-    magenta: {
-      color: '#939',
-      empty: false
-    },
-    cyan: {
-      color: '#399',
-      empty: false
-    }
-  }
-
   this.type = null;
-  this.color = '000';
+
   this.moving = false;
   this.locked = false;
   this.moveTarget = null;
@@ -53,46 +20,40 @@ var Model_Tile = function(){
       this.lock();
     }
 
-    this.x     = x;
-    this.y     = y;
+    this.x = x;
+    this.y = y;
 
     if(factory == 'init' && this.y < this.grid.START_HEIGHT) {
-      this.type = this.TYPES.void;
+      this.type = Model_Tile_Types.void;
     } else {
       switch(parseInt(Math.random() * 6)) {
         case 0:
-          this.type = this.TYPES.red;
+          this.type = Model_Tile_Types.red;
           break;
         case 1:
-          this.type = this.TYPES.green;
+          this.type = Model_Tile_Types.green;
           break;
         case 2:
-          this.type = this.TYPES.blue;
+          this.type = Model_Tile_Types.blue;
           break;
         case 3:
-          this.type = this.TYPES.yellow;
+          this.type = Model_Tile_Types.yellow;
           break;
         case 4:
-          this.type = this.TYPES.magenta;
+          this.type = Model_Tile_Types.magenta;
           break;
         case 5:
-          this.type = this.TYPES.cyan;
+          this.type = Model_Tile_Types.cyan;
           break;
         default:
-          this.type = this.TYPES.void;
+          this.type = Model_Tile_Types.void;
           break;
       }
     }
-    this.updateFromType()
   }
 
   this.invalidMatch = function() {
-    return this.empty === true || this.moving === true || this.locked === true
-  }
-
-  this.updateFromType = function(){
-    this.color = this.type.color;
-    this.empty = this.type.empty;
+    return this.type.empty === true || this.moving === true || this.locked === true
   }
 
   this.swapWith = function(ty, tx, delay, callback) {
@@ -145,7 +106,7 @@ var Model_Tile = function(){
     // Empty tiles cannot "fall"
     if(!this.invalidMatch())
     {
-      if((this.y+1) < this.grid.HEIGHT && this.grid.rows[this.y + 1][this.x].empty === true){
+      if((this.y+1) < this.grid.HEIGHT && this.grid.rows[this.y + 1][this.x].type.empty === true){
         // Tile is above empty space.
         this.swapWith(this.y + 1, this.x, this.grid.GRAVITY_DELAY, function(target){
 
@@ -172,24 +133,24 @@ var Model_Tile = function(){
     var down  = this.matchCheckDown([]);
 
     if(left.length + right.length >= 2) {
-      this.transformTileType(this.TYPES.void)
+      this.transformTileType(Model_Tile_Types.void)
 
       for(var i=0; i< left.length; i++) {
-        this.grid.rows[left[i][1]][left[i][0]].transformTileType(this.TYPES.void)
+        this.grid.rows[left[i][1]][left[i][0]].transformTileType(Model_Tile_Types.void)
       }
       for(var i=0; i< right.length; i++) {
-        this.grid.rows[right[i][1]][right[i][0]].transformTileType(this.TYPES.void)
+        this.grid.rows[right[i][1]][right[i][0]].transformTileType(Model_Tile_Types.void)
       }
     }
 
     if((up.length + down.length) >= 2) {
-      this.transformTileType(this.TYPES.void)
+      this.transformTileType(Model_Tile_Types.void)
 
       for(var i=0; i< up.length; i++) {
-        this.grid.rows[up[i][1]][up[i][0]].transformTileType(this.TYPES.void)
+        this.grid.rows[up[i][1]][up[i][0]].transformTileType(Model_Tile_Types.void)
       }
       for(var i=0; i< down.length; i++) {
-        this.grid.rows[down[i][1]][down[i][0]].transformTileType(this.TYPES.void)
+        this.grid.rows[down[i][1]][down[i][0]].transformTileType(Model_Tile_Types.void)
       }
     }
   }
@@ -255,7 +216,6 @@ var Model_Tile = function(){
 
   this.transformTileType = function(type) {
     this.type = type;
-    this.updateFromType();
 
     if(this.y > 0) {
       this.grid.rows[this.y-1][this.x].gravity()

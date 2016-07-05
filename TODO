@@ -1,6 +1,5 @@
 v0.1 - Functional Base PL Implementation.
   Prevent Nudge gravity cascade - Timing Issue?
-  Fix "type" - extract as object and remove "local" shadows.
   Match animation and "hangtime"
   Gravitational "Hangtime"
   Global Combo Detection/Scoring.

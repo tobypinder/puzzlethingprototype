@@ -68,7 +68,7 @@ var View_Grid = function(){
 
     y = y - this.nudgeY();
 
-    this.ctx.fillStyle = this.model.grid.rows[j][i].color;
+    this.ctx.fillStyle = this.model.grid.rows[j][i].type.color;
     this.ctx.fillRect(x, y, this.tileWidth, this.tileHeight)
 
     //if(j == this.model.grid.HEIGHT - 1) {
