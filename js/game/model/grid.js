@@ -13,11 +13,11 @@ var Model_Grid = function(){
 
   this.CURSOR_MOVE_DELAY = 130;
   this.NUDGE_DELAY = 700;
-  this.ROLLING_NUDGE_TIMER = 8000
+  this.ROLLING_NUDGE_TIMER = 10000;
 
   //this.CURSOR_SWAP_DELAY = 500;
   //this.GRAVITY_DELAY = 1000;
-  this.CURSOR_SWAP_DELAY = 175;
+  this.CURSOR_SWAP_DELAY = 250;//175;
   this.GRAVITY_DELAY = 100;
 
   this.cursorMoveDelay = 0;
@@ -30,6 +30,7 @@ var Model_Grid = function(){
   this.init = function(stats){
     this.stats = stats;
     this.model = stats.model;
+    stats.grid = this;
 
     for(var i=0; i<this.HEIGHT; i++) {
       var row = [];
@@ -187,6 +188,11 @@ var Model_Grid = function(){
       }.bind(this));
     }
 
-    this.nudgeDelay = this.NUDGE_DELAY;
+    if(forced === true) {
+      this.nudgeDelay = this.NUDGE_DELAY;
+    }
+
+    this.cursorY = Math.max(this.cursorY - 1, 0)
+    this.stats.recordNudge();
   }
 }
